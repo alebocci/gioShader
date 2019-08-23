@@ -1,0 +1,13 @@
+{
+  "properties": [
+    {
+      "name": "shelly.address",
+      "type": "java.lang.String",
+      "description": "Address of shelly."
+  },
+    {
+      "name": "shelly.port",
+      "type": "java.lang.Integer",
+      "description": "Port of shelly."
+    }
+] }
