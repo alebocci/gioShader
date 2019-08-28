@@ -27,7 +27,7 @@ public class SenseEndpoint {
             return  ResponseEntity.noContent().build();
         }
         HashMap<String, Integer> res = new HashMap<>();
-        res.put("heigth",height);
+        res.put("height",height);
         return ResponseEntity.ok().body(res);
     }
 
