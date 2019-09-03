@@ -27,6 +27,7 @@ public class ActEndpoint {
 
     @RequestMapping(value="/close",method = RequestMethod.PUT)
     public ResponseEntity close() {
+        LOG.info("Close request");
         if(shelly.isWorking()){
             LOG.info("Close request refused: Shelly Locked");
             return ResponseEntity.status(HttpStatus.LOCKED).build();
@@ -37,7 +38,9 @@ public class ActEndpoint {
 
     @RequestMapping(value="/open",method = RequestMethod.PUT)
     public ResponseEntity open() {
+        LOG.info("Open request");
         if(shelly.isWorking()){
+            LOG.info("Open request refused: Shelly Locked");
             return ResponseEntity.status(HttpStatus.LOCKED).build();
         }
         shelly.open();
@@ -46,6 +49,7 @@ public class ActEndpoint {
 
     @RequestMapping(value="/goto",method = RequestMethod.PUT)
     public ResponseEntity goTo(@RequestParam(name="pos")  int pos) {
+        LOG.info("Go to {} request", pos);
         if(pos <0 || pos >100){
             return ResponseEntity.badRequest().body("Invalid position value.");
         }
@@ -59,7 +63,7 @@ public class ActEndpoint {
     @RequestMapping(value="/tilt",method = RequestMethod.PUT)
     public ResponseEntity tilt(@RequestParam(name="pos", required = false) Integer pos,
                                @RequestParam(name="name", required = false) String l) {
-        LOG.info("Pos = {}, L = {}", pos,l);
+        LOG.info("Tilt request to pos {} or name {}",pos, l);
         if((pos==null && l==null) || (pos!=null && l!=null)){
             return ResponseEntity.badRequest().body("Either \"name\" or \"pos\" parameters are required.");
         }
@@ -120,6 +124,7 @@ public class ActEndpoint {
 
     @RequestMapping(value="/stop",method = RequestMethod.PUT)
     public ResponseEntity stop() {
+        LOG.info("Stop request");
         shelly.stop();
         return ResponseEntity.accepted().build();
     }

@@ -15,13 +15,13 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @SpringBootApplication
 public class GioshaderApplication {
 
+	public static void main(String[] args) {
+		SpringApplication.run(GioshaderApplication.class, args);
+	}
+
 	@Bean
 	public ExitCodeGenerator exitCodeGenerator() {
 		return () -> 42;
-	}
-
-	public static void main(String[] args) {
-		SpringApplication.run(GioshaderApplication.class, args);
 	}
 
 	@Bean

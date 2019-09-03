@@ -42,6 +42,7 @@ public class GoalEndpoint {
     /*Return the list of goals in JSON, 204 No Content if the list is empty*/
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity getGoals() {
+        LOG.info("Get goal list request");
        if(goalList.isEmpty()){return ResponseEntity.noContent().build();}
        return ResponseEntity.ok(goalList);
     }
@@ -49,6 +50,7 @@ public class GoalEndpoint {
     /**/
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity setNewGoal(@RequestBody Goal g) {
+        LOG.info("Set goal request, g: {}",g);
         int bottom = g.getHeightBottom();
         int top = g.getHeightTop();
         if(bottom==-1 && top==-1 && g.getLevel()== ShutterShelly.LightLevel.UNDEFINED){
@@ -73,6 +75,7 @@ public class GoalEndpoint {
 
     @RequestMapping(value="/{id}" , method = RequestMethod.PUT)
     public ResponseEntity modifyGoal(@RequestBody Goal g, @PathVariable("id") int id){
+        LOG.info("Modify goal request, id: {}",id);
         if(id >= this.id.get() || id < 0){return ResponseEntity.notFound().build();}
         g.setId(id);
         id=findIndexById(id);
@@ -82,6 +85,7 @@ public class GoalEndpoint {
 
     @RequestMapping(value="/{id}" , method = RequestMethod.DELETE)
     public ResponseEntity deleteGoal(@PathVariable("id") int id){
+        LOG.info("Delete goal request, id: {}",id);
         if(id >= this.id.get() || id < 0){return ResponseEntity.notFound().build();}
         id=findIndexById(id);
         if(id==-1){return ResponseEntity.notFound().build();}
