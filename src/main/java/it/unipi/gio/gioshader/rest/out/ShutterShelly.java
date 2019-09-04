@@ -60,7 +60,7 @@ public class ShutterShelly {
         }else{
             int current_pos = response.getCurrent_pos();
             this.lastDirectionUP = response.getLast_direction().equals("open");
-             if(lastDirectionUP){
+            if(lastDirectionUP){
                  level=LightLevel.DARK;
              }else{
                  level=LightLevel.BRIGHT;
