@@ -21,6 +21,8 @@ public class ShutterShelly {
     private boolean lastDirectionUP;
     private boolean statusValid;
     private Thread worker;
+    private boolean opened;
+    private boolean closed;
 
     public enum LightLevel {
         DARK, LOW, MEDIUM, BRIGHT, UNDEFINED
@@ -34,6 +36,8 @@ public class ShutterShelly {
         level = LightLevel.UNDEFINED;
         lastDirectionUP = false;
         statusValid = false;
+        opened = false;
+        closed = false;
     }
 
     public synchronized boolean isWorking(){
@@ -95,10 +99,12 @@ public class ShutterShelly {
         LOG.info("Open request, after synch:");
         logStatus();
         if(!statusValid){return false;}
-        if(height==100){return true;}
+        if(height==100 || opened){return true;}
         startWork();
         restTemplate.getForObject(baseAddress+"go=open", ShellyResponse.class);
         stopWork();
+        opened=true;
+        closed=false;
         return true;
     }
 
@@ -107,7 +113,7 @@ public class ShutterShelly {
         LOG.info("Close request, after synch:");
         logStatus();
         if(!statusValid){return false;}
-        if((height==3 || height==4 || height==5) && lastDirectionUP) return true;
+        if(closed){return true;}
         new Thread(() -> {
             restTemplate.getForObject(baseAddress+"go=close", ShellyResponse.class);
             startWork();
@@ -130,6 +136,8 @@ public class ShutterShelly {
             restTemplate.getForObject(baseAddress+"go=to_pos&roller_pos=3", ShellyResponse.class);
             stopWork();
         }).start();
+        closed=true;
+        opened=false;
         return true;
     }
 
@@ -178,6 +186,8 @@ public class ShutterShelly {
             stopWork();
             this.level=l;
         }).start();
+        opened=false;
+        closed=false;
         return true;
     }
 
@@ -200,6 +210,8 @@ public class ShutterShelly {
             restTemplate.getForObject(baseAddress+"go=to_pos&roller_pos="+height, ShellyResponse.class);
             stopWork();
         }
+        opened=false;
+        closed=false;
     }
 
     public synchronized boolean goTo(int h) {
@@ -247,6 +259,8 @@ public class ShutterShelly {
             restTemplate.getForObject(baseAddress+"go=to_pos&roller_pos="+(this.height), ShellyResponse.class);
             stopWork();
         }).start();
+        opened=false;
+        closed=false;
         return true;
     }
 
@@ -255,6 +269,8 @@ public class ShutterShelly {
         logStatus();
         restTemplate.getForObject(baseAddress+"go=stop", ShellyResponse.class);
         stopWork();
+        opened=false;
+        closed=false;
     }
 
     public synchronized InetAddress getIp() {
