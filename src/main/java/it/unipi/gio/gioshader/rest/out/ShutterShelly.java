@@ -90,21 +90,24 @@ public class ShutterShelly {
         }
     }
 
-    public synchronized void open() {
+    public synchronized boolean open() {
         shellySync();
         LOG.info("Open request, after synch:");
         logStatus();
-        if(!statusValid || height==100){return;}
+        if(!statusValid){return false;}
+        if(height==100){return true;}
         startWork();
         restTemplate.getForObject(baseAddress+"go=open", ShellyResponse.class);
         stopWork();
+        return true;
     }
 
-    public synchronized void close() {
+    public synchronized boolean close() {
         shellySync();
         LOG.info("Close request, after synch:");
         logStatus();
-        if(!statusValid || ((height==3 || height==4 || height==5) && lastDirectionUP)){return;}
+        if(!statusValid){return false;}
+        if((height==3 || height==4 || height==5) && lastDirectionUP) return true;
         new Thread(() -> {
             restTemplate.getForObject(baseAddress+"go=close", ShellyResponse.class);
             startWork();
@@ -127,13 +130,15 @@ public class ShutterShelly {
             restTemplate.getForObject(baseAddress+"go=to_pos&roller_pos=3", ShellyResponse.class);
             stopWork();
         }).start();
+        return true;
     }
 
-    public synchronized void tilt(LightLevel l) {
+    public synchronized boolean tilt(LightLevel l) {
         shellySync();
         LOG.info("Tilt request {}, after synch:",l.name());
         logStatus();
-        if(!statusValid || (l==level && height <5)) return;
+        if(!statusValid) return false;
+        if (l==level && height <5) return true;
         new Thread(() -> {
             restTemplate.getForObject(baseAddress+"go=close", ShellyResponse.class);
             startWork();
@@ -173,6 +178,7 @@ public class ShutterShelly {
             stopWork();
             this.level=l;
         }).start();
+        return true;
     }
 
     public void tiltThere(boolean open){
@@ -196,12 +202,13 @@ public class ShutterShelly {
         }
     }
 
-    public synchronized void goTo(int h) {
-       if(h<0 || h > 100){return;}
+    public synchronized boolean goTo(int h) {
+       if(h<0 || h > 100){return false;}
        shellySync();
         LOG.info("GoTo request h= {}, after sync:",h);
         logStatus();
-        if(!statusValid || (height==h && level==LightLevel.DARK)){return;}
+        if(!statusValid){return false;}
+        if((height==h && level==LightLevel.DARK)) {return true;}
         new Thread(() -> {
             int pos;
             boolean toDark;
@@ -240,6 +247,7 @@ public class ShutterShelly {
             restTemplate.getForObject(baseAddress+"go=to_pos&roller_pos="+(this.height), ShellyResponse.class);
             stopWork();
         }).start();
+        return true;
     }
 
     public void stop(){

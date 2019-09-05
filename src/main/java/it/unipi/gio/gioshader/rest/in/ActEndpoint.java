@@ -31,7 +31,7 @@ public class ActEndpoint {
             LOG.info("Close request refused: Shelly Locked");
             return ResponseEntity.status(HttpStatus.LOCKED).build();
         }
-       shelly.close();
+       if(!shelly.close()){return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();}
        return ResponseEntity.accepted().build();
     }
 
@@ -41,7 +41,7 @@ public class ActEndpoint {
             LOG.info("Open request refused: Shelly Locked");
             return ResponseEntity.status(HttpStatus.LOCKED).build();
         }
-        shelly.open();
+        if(!shelly.open()){return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();}
         return ResponseEntity.accepted().build();
     }
 
@@ -54,7 +54,7 @@ public class ActEndpoint {
             LOG.info("Go to request refused: Shelly Locked");
             return ResponseEntity.status(HttpStatus.LOCKED).build();
         }
-        shelly.goTo(pos);
+        if(!shelly.goTo(pos)){return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();}
         return ResponseEntity.accepted().build();
     }
 
@@ -116,7 +116,7 @@ public class ActEndpoint {
                     return ResponseEntity.badRequest().body("Invalid position name.");
             }
         }
-        shelly.tilt(level);
+        if(!shelly.tilt(level)){return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();}
         return ResponseEntity.accepted().build();
     }
 
