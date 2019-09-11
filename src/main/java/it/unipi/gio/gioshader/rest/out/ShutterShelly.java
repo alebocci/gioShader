@@ -13,7 +13,7 @@ public class ShutterShelly {
 
     private static final Logger LOG = LoggerFactory.getLogger(ShutterShelly.class);
 
-    private InetAddress ip;
+    private String ip;
     private String baseAddress;
     private RestTemplate restTemplate;
     private int height;
@@ -29,8 +29,8 @@ public class ShutterShelly {
     }
 
     public ShutterShelly(InetAddress ip){
-        this.ip = ip;
-        baseAddress = "http://"+ip.getHostName()+"/roller/0?";
+        this.ip = ip.getHostName();
+        baseAddress = "http://"+this.ip+"/roller/0?";
         this.restTemplate = new RestTemplate();
         height = 0;
         level = LightLevel.UNDEFINED;
@@ -273,13 +273,13 @@ public class ShutterShelly {
         closed=false;
     }
 
-    public synchronized InetAddress getIp() {
+    public synchronized String getIp() {
         return ip;
     }
 
-    public synchronized void setIp(InetAddress ip) {
+    public synchronized void setIp(String ip) {
         if(!this.ip.equals(ip)) {
-            baseAddress = "http://"+ip.getHostAddress()+":80/roller/0?";
+            baseAddress = "http://"+ip+":80/roller/0?";
             this.ip = ip;
         }
     }

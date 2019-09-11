@@ -6,20 +6,11 @@ import java.time.LocalTime;
 
 public class Goal {
 
-    private int id=-1;
     private int startHour=-1;
     private int stopHour=-1;
     private int heightBottom = -1;
     private int heightTop = -1;
     private ShutterShelly.LightLevel level = ShutterShelly.LightLevel.UNDEFINED;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public int getStartHour() {
         return startHour;
