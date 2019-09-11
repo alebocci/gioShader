@@ -52,10 +52,12 @@ public class GoalLogic implements Runnable {
                 if(!checkConnectionAlive()){
                     if(++pings==3) {
                         activateGoals();
-                    }else {
-                        pings = 0;
+                        pings=0;
                     }
+                }else {
+                    pings = 0;
                 }
+
                 secondSleep = 60;
             }
             try {
@@ -120,7 +122,7 @@ public class GoalLogic implements Runnable {
     }
 
     private boolean checkConnectionAlive(){
-        LOG.info("Ping service above");
+        LOG.info("Ping service above at" +urlToPing+"/goals/ping");
         ResponseEntity<Void> response;
         try {
             response =  restTemplate.getForEntity(urlToPing+"/goals/ping", Void.class);
