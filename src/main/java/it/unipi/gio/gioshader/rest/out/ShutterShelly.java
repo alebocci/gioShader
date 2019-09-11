@@ -28,10 +28,10 @@ public class ShutterShelly {
         DARK, LOW, MEDIUM, BRIGHT, UNDEFINED
     }
 
-    public ShutterShelly(InetAddress ip){
+    public ShutterShelly(InetAddress ip, RestTemplate restTemplate){
         this.ip = ip.getHostName();
         baseAddress = "http://"+this.ip+"/roller/0?";
-        this.restTemplate = new RestTemplate();
+        this.restTemplate = restTemplate;
         height = 0;
         level = LightLevel.UNDEFINED;
         lastDirectionUP = false;

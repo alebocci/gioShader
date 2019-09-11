@@ -4,14 +4,12 @@ import it.unipi.gio.gioshader.model.Goal;
 import it.unipi.gio.gioshader.rest.out.ShutterShelly;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 @Component
@@ -26,9 +24,12 @@ public class GoalLogic implements Runnable {
     private AtomicBoolean goalActive;
     private String urlToPing;
 
-    public GoalLogic(ShutterShelly shelly){
+    private RestTemplate restTemplate;
+
+    public GoalLogic(ShutterShelly shelly, RestTemplate restTemplate){
         this.shelly = shelly;
         goalActive = new AtomicBoolean(true);
+        this.restTemplate=restTemplate;
         //autostart
         new Thread(this).start();
     }
@@ -119,10 +120,10 @@ public class GoalLogic implements Runnable {
     }
 
     private boolean checkConnectionAlive(){
-        RestTemplate restTemplate = new RestTemplate();
+        LOG.info("Ping service above");
         ResponseEntity<Void> response;
         try {
-            response =  restTemplate.getForEntity(urlToPing+"/goal/ping", Void.class);
+            response =  restTemplate.getForEntity(urlToPing+"/goals/ping", Void.class);
         }catch (HttpStatusCodeException | ResourceAccessException e){
             return false;
         }

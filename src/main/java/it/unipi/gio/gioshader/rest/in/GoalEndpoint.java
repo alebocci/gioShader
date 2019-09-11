@@ -82,6 +82,7 @@ public class GoalEndpoint {
     }
     @RequestMapping(value="/disable", method = RequestMethod.PUT)
     public ResponseEntity disableGoals(HttpServletRequest request) {
+        LOG.info("Goal disable request");
         String url = "http://"+request.getRemoteAddr()+":"+request.getRemotePort();
         if(!logic.disactivateGoals(url)){
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
@@ -91,6 +92,7 @@ public class GoalEndpoint {
 
     @RequestMapping(value="/enable", method = RequestMethod.PUT)
     public ResponseEntity enableGoals() {
+        LOG.info("Goal enable request");
         logic.activateGoals();
         return ResponseEntity.ok().build();
     }
