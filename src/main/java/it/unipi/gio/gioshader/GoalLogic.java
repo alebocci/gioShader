@@ -122,10 +122,10 @@ public class GoalLogic implements Runnable {
     }
 
     private boolean checkConnectionAlive(){
-        LOG.info("Ping service above at" +urlToPing+"/goals/ping");
+        LOG.info("Ping service above at " +urlToPing+"/api/goals/ping");
         ResponseEntity<Void> response;
         try {
-            response =  restTemplate.getForEntity(urlToPing+"/goals/ping", Void.class);
+            response =  restTemplate.getForEntity(urlToPing+"/api/goals/ping", Void.class);
         }catch (HttpStatusCodeException | ResourceAccessException e){
             return false;
         }
