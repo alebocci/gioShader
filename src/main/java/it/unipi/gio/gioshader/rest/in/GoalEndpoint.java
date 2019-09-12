@@ -71,7 +71,7 @@ public class GoalEndpoint {
             return ResponseEntity.badRequest().body("A goal with intermediate tilt level is supported only without top and bottom heights.");
         }
         if(!logic.setGoal(g)){
-            ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         return ResponseEntity.ok(g);
     }

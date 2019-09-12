@@ -9,8 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.websocket.server.PathParam;
-
 @RestController
 @RequestMapping("/api/act")
 public class ActEndpoint {
@@ -31,7 +29,7 @@ public class ActEndpoint {
             LOG.info("Close request refused: Shelly Locked");
             return ResponseEntity.status(HttpStatus.LOCKED).build();
         }
-       if(!shelly.close()){return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();}
+       if(!shelly.closeShelly()){return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();}
        return ResponseEntity.accepted().build();
     }
 
@@ -41,7 +39,7 @@ public class ActEndpoint {
             LOG.info("Open request refused: Shelly Locked");
             return ResponseEntity.status(HttpStatus.LOCKED).build();
         }
-        if(!shelly.open()){return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();}
+        if(!shelly.openShelly()){return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();}
         return ResponseEntity.accepted().build();
     }
 

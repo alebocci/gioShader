@@ -94,7 +94,7 @@ public class ShutterShelly {
         }
     }
 
-    public synchronized boolean open() {
+    public synchronized boolean openShelly() {
         shellySync();
         LOG.info("Open request, after synch:");
         logStatus();
@@ -108,7 +108,7 @@ public class ShutterShelly {
         return true;
     }
 
-    public synchronized boolean close() {
+    public synchronized boolean closeShelly() {
         shellySync();
         LOG.info("Close request, after synch:");
         logStatus();
