@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /*
@@ -81,9 +82,14 @@ public class GoalEndpoint {
         return ResponseEntity.ok().build();
     }
     @RequestMapping(value="/disable", method = RequestMethod.PUT)
-    public ResponseEntity disableGoals(HttpServletRequest request) {
-        LOG.info("Goal disable request");
-        String url = "http://"+request.getRemoteAddr()+":"+request.getRemotePort();
+    public ResponseEntity disableGoals(HttpServletRequest request, Map<String,String> body) {
+        if(body==null || body.containsKey("port")){
+            return ResponseEntity.badRequest().body("Port where contact server not found");
+        }
+        String serverPort = body.get("port");
+        LOG.info("Goal disable request at port "+serverPort);
+
+        String url = "http://"+request.getRemoteAddr()+":"+serverPort;
         if(!logic.disactivateGoals(url)){
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
