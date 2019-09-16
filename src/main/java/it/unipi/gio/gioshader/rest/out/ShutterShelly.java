@@ -41,7 +41,7 @@ public class ShutterShelly {
     }
 
     public synchronized boolean isWorking(){
-        ShellyResponse response=null;
+        ShellyResponse response;
         try {
             response = restTemplate.getForObject(baseAddress, ShellyResponse.class);
         }catch (HttpStatusCodeException | ResourceAccessException e){
@@ -123,7 +123,7 @@ public class ShutterShelly {
             try {
                 Thread.sleep(sleep);
             } catch (InterruptedException e) {return;}
-            ShellyResponse response = null;
+            ShellyResponse response;
             while (moving){
                 response = restTemplate.getForObject(baseAddress, ShellyResponse.class);
                 if(response!=null && response.getState()!=null) {

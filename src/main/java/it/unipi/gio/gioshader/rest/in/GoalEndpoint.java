@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /*
 * Class that manages the endpoint of the goals.
@@ -25,9 +24,6 @@ public class GoalEndpoint {
     private static final Logger LOG = LoggerFactory.getLogger(GoalEndpoint.class);
 
     private GoalLogic logic;
-
-    /*Unique id for every goal*/
-    private AtomicInteger id = new AtomicInteger();
 
     @Autowired
     public GoalEndpoint(GoalLogic logic){
@@ -83,13 +79,13 @@ public class GoalEndpoint {
     }
     @RequestMapping(value="/disable", method = RequestMethod.PUT)
     public ResponseEntity disableGoals(HttpServletRequest request, @RequestBody Map<String,String> body) {
-        if(body==null || !body.containsKey("port")){
-            return ResponseEntity.badRequest().body("Port where contact server not found");
+        if(body==null || !body.containsKey("endpoint")){
+            return ResponseEntity.badRequest().body("Endpoint where contact server not found");
         }
-        String serverPort = body.get("port");
-        LOG.info("Goal disable request at port "+serverPort);
+        String serverEndpoint = body.get("endpoint");
+        LOG.info("Goal disable request");
 
-        String url = "http://"+request.getRemoteAddr()+":"+serverPort;
+        String url = "http://"+serverEndpoint;
         if(!logic.disactivateGoals(url)){
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }

@@ -48,8 +48,8 @@ public class GioshaderApplication {
 			RestTemplateBuilder restTemplateBuilder) {
 
 		return restTemplateBuilder
-				.setConnectTimeout(Duration.ofSeconds(10))
-				.setReadTimeout(Duration.ofSeconds(10))
+				.setConnectTimeout(Duration.ofSeconds(2))
+				.setReadTimeout(Duration.ofSeconds(2))
 				.build();
 	}
 }
